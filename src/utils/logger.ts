@@ -9,6 +9,12 @@ interface TransformableInfo {
   [key: string]: any
 }
 
+const folderName = 'log'
+
+if (!existsSync(folderName)) {
+  mkdirSync(folderName)
+}
+
 /**
  * logger
  */
@@ -26,14 +32,12 @@ export const logger = createLogger({
     new transports.Console({
       handleExceptions: true,
     }),
+    new transports.File({
+      level: 'error',
+      filename: `${folderName}/events.log`,
+    }),
   ],
 })
-
-const folderName = 'log'
-
-if (!existsSync(folderName)) {
-  mkdirSync(folderName)
-}
 
 export const eventLogger = createLogger({
   level: 'info',

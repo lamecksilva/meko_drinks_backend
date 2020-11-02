@@ -1,7 +1,7 @@
 import { Application, Errback, Request, Response } from 'express'
 
-// import { imagesRouter } from './router';
 import { logger } from '../utils'
+import { userRouter } from './routes'
 
 export async function applyRoutes(app: Application): Promise<void> {
   // app.use('/images', await imagesRouter());
@@ -11,6 +11,8 @@ export async function applyRoutes(app: Application): Promise<void> {
       version: `${process.env?.npm_package_version || '0.0.0'}`,
     })
   )
+
+  app.use('/users', await userRouter())
 
   app.use((_: Request, res: Response) => {
     res.status(404).json({ message: 'Not Found' })
