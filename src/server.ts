@@ -16,7 +16,7 @@ export async function startServer(): Promise<void> {
   await applyRoutes(app)
 
   app.listen(SERVER_PORT, () => {
-    logger.info(`${SERVER_NAME} running on port: ${SERVER_PORT}`)
-    logger.info('--------------------------------------------')
+    logger.info(`🚀 ${SERVER_NAME} running on port: ${SERVER_PORT}`)
+    logger.info('-----------------------------------------------')
   })
 }
