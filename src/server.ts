@@ -8,7 +8,7 @@ export async function startServer(): Promise<void> {
   const SERVER_PORT: string | number = process.env.SERVER_PORT || 9002
   const SERVER_NAME: string | number = process.env.SERVER_NAME || 'Server'
 
-  logger.info(`${SERVER_NAME} Iniciando...`)
+  logger.info(`[ STATUS ] Starting ${SERVER_NAME}...`)
   const app: Application = express()
 
   await applyMiddlewares(app)
@@ -16,7 +16,7 @@ export async function startServer(): Promise<void> {
   await applyRoutes(app)
 
   app.listen(SERVER_PORT, () => {
-    logger.info(`🚀 ${SERVER_NAME} running on port: ${SERVER_PORT}`)
-    logger.info('-----------------------------------------------')
+    logger.info(`[ STATUS ] 🚀 ${SERVER_NAME} running on port: ${SERVER_PORT}`)
+    logger.info('-----------------------------------------------------------------------')
   })
 }

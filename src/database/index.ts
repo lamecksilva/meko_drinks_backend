@@ -1,3 +1,3 @@
 export * from './models'
-export * from './mongodb'
+export * from './connection'
 export * from './repositories'

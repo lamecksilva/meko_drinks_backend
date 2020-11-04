@@ -19,15 +19,15 @@ export async function connectDB(): Promise<void> {
 
     // logger.info(`🍃 MongoDB Connected.✅`)
   } catch (err) {
-    logger.error('🍃 MongoDB Connection ERROR ❌')
+    logger.error('[ DB ] 🍃 MongoDB Connection ERROR ❌')
     logger.error(err)
   }
 }
 
 connection.on('connected', () => {
-  logger.info(`🍃 MongoDB Connected.✅`)
+  logger.info(`[ DB ] 🍃 MongoDB Connected.✅`)
 })
 
 connection.on('connecting', () => {
-  logger.info('🍃 Connecting to MongoDB...🔌')
+  logger.info('[ DB ] 🍃 Connecting to MongoDB...🔌')
 })
