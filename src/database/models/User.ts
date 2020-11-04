@@ -4,7 +4,7 @@ const UserSchema = new Schema(
   {
     status: {
       type: Boolean,
-      requred: true,
+      required: true,
       default: true,
     },
     name: {

@@ -8,4 +8,6 @@ const unsetEnv = requiredEnv.filter(
 
 if (unsetEnv.length > 0) {
   logger.warn('Required ENV variables are not set: [' + unsetEnv.join(', ') + ']')
+} else {
+  logger.info('[ ENV ] Environment configured and ready.')
 }
