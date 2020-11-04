@@ -1,14 +1,29 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import Validator, { ErrorMessages, Errors, Rules } from 'validatorjs'
+import Validator, { ErrorMessages, Rules } from 'validatorjs'
 
-export const validator = (
+export async function validator(
   body: any,
   rules: Rules,
-  customMessages: ErrorMessages,
-  callback: (errors: Errors | null, passed: boolean) => void
-): void => {
-  const validation = new Validator(body, rules, customMessages)
+  customMessages: ErrorMessages
+): Promise<any> {
+  return new Promise((resolve, reject) => {
+    const validator = new Validator(body, rules, customMessages)
+    const handleFails = () => {
+      console.log(validator.errors)
+      reject(validator.errors.all())
+    }
 
-  validation.passes(() => callback(null, true))
-  validation.fails(() => callback(validation.errors, false))
+    // Asynchronous handler (with callbacks)
+    if (validator.hasAsync) {
+      validator.passes(() => resolve())
+      validator.fails(() => handleFails())
+    } else {
+      // Synchronous handler
+      if (validator.passes()) {
+        resolve()
+      } else {
+        handleFails()
+      }
+    }
+  })
 }
