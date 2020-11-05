@@ -5,36 +5,35 @@ import { User } from '../../database'
 import { Responses } from '../../utils'
 import { validator } from '../../utils/validator'
 
-export async function userSignUpValidationMiddleware(
+export async function userLoginValidationMiddleware(
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<Response | any> {
   const rules: Rules = {
-    name: 'required|string|min:3|max:30',
     email: 'required|email',
-    password: 'required|confirmed|min:6|max:25',
+    password: 'required|string',
   }
 
   await validator(req.body, rules, {})
     .then(async () => {
       await User.findOne({ email: req.body.email })
         .then((user) => {
-          if (user) {
+          if (!user) {
             Responses.error(
               res,
-              { email: 'E-mail already registered' },
-              'There was an error in the registration'
+              { email: 'E-mail not registered' },
+              'There was an error in the login'
             )
           } else {
             next()
           }
         })
         .catch((error) => {
-          return Responses.error(res, error, 'There was an error in the registration')
+          return Responses.error(res, error, 'There was an error in the login')
         })
     })
     .catch((err) => {
-      return Responses.error(res, err, 'There was an error in the registration')
+      return Responses.error(res, err, 'There was an error in the login')
     })
 }

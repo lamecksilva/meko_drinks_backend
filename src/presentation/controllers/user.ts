@@ -1,7 +1,8 @@
-import { hash } from 'bcrypt'
+import { compare, hash } from 'bcrypt'
 import { NextFunction, Request, Response } from 'express'
 
-import { returnAllUsersDB, saveNewUserDB } from '../../database'
+import { getUserByEmailDB, getUserById, returnAllUsersDB, saveNewUserDB } from '../../database'
+import { jwtSign } from '../../modules'
 import { Responses } from '../../utils'
 
 export const userController = {
@@ -17,12 +18,35 @@ export const userController = {
   },
   signUpUser: async (req: Request, res: Response, next: NextFunction): Promise<any> => {
     try {
-      console.log('SignUP CONTROLLER ')
       const passwordCrypted = await hash(req.body.password, 10)
 
-      const newUser = await saveNewUserDB({ ...req.body, password: passwordCrypted })
+      const { _id } = await saveNewUserDB({ ...req.body, password: passwordCrypted })
+
+      const newUser = await getUserById(_id)
 
       return Responses.success(res, newUser)
+    } catch (err) {
+      next(err)
+    }
+  },
+  loginUser: async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+    try {
+      const user = await getUserByEmailDB(req.body.email)
+
+      const match = await compare(req.body.password, user.password)
+
+      if (!match) {
+        return Responses.error(res, { password: 'Password not match' }, 'Error while login')
+      }
+
+      const { _id, name, email, avatar, status } = user
+
+      const jwtToken = await jwtSign(
+        { id: _id, name, email, avatar, status },
+        { subject: `${_id}` }
+      )
+
+      return Responses.success(res, { token: jwtToken })
     } catch (err) {
       next(err)
     }

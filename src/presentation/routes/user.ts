@@ -1,7 +1,7 @@
 import { Router } from 'express'
 
 // import passport from 'passport'
-import { userSignUpValidationMiddleware } from '../../validation'
+import { userLoginValidationMiddleware, userSignUpValidationMiddleware } from '../../validation'
 import { userController } from '../controllers'
 
 const router = Router()
@@ -15,6 +15,8 @@ export async function userRouter(): Promise<Router> {
     userSignUpValidationMiddleware,
     userController.signUpUser
   )
+
+  router.post('/login', userLoginValidationMiddleware, userController.loginUser)
 
   return router
 }
