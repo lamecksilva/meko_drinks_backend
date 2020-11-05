@@ -1,7 +1,15 @@
 import { compare, hash } from 'bcrypt'
 import { NextFunction, Request, Response } from 'express'
 
-import { getUserByEmailDB, getUserById, returnAllUsersDB, saveNewUserDB } from '../../database'
+import {
+  getUserByEmailDB,
+  getUserById,
+  removeUserDB,
+  returnAllUsersDB,
+  saveNewUserDB,
+  updatePasswordDB,
+  updateUserDB,
+} from '../../database'
 import { jwtSign } from '../../modules'
 import { Responses } from '../../utils'
 
@@ -13,7 +21,6 @@ export const userController = {
       return Responses.success(res, users)
     } catch (err) {
       next(err)
-      // Responses.error(res, err, 'Return all users DB CONTROLLER')
     }
   },
   signUpUser: async (req: Request, res: Response, next: NextFunction): Promise<any> => {
@@ -47,6 +54,39 @@ export const userController = {
       )
 
       return Responses.success(res, { token: jwtToken })
+    } catch (err) {
+      next(err)
+    }
+  },
+  updateUser: async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+    try {
+      await updateUserDB(req.params.id, req.body)
+
+      const updatedUser = await getUserById(req.params.id)
+
+      return Responses.success(res, updatedUser)
+    } catch (err) {
+      next(err)
+    }
+  },
+  updatePassword: async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+    try {
+      const passwordCrypted = await hash(req.body.password, 10)
+
+      await updatePasswordDB(req.params.id, passwordCrypted)
+
+      const updatedUser = await getUserById(req.params.id)
+
+      return Responses.success(res, updatedUser)
+    } catch (err) {
+      next(err)
+    }
+  },
+  removeUser: async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+    try {
+      const user = await removeUserDB(req.params.id)
+
+      return Responses.success(res, user)
     } catch (err) {
       next(err)
     }
