@@ -6,7 +6,7 @@ import { User } from '..'
  */
 export async function returnAllUsersDB(): Promise<any> {
   try {
-    const users = await User.find({}).lean()
+    const users = await User.find({}, { password: 0, __v: 0 }).lean()
 
     return users
   } catch (err) {
