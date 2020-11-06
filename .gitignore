@@ -105,3 +105,6 @@ dist
 
 # Keys
 keys/
+
+# Build Output
+build/

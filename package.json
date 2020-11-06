@@ -2,7 +2,7 @@
   "name": "meko_drinks_backend",
   "version": "0.1.0",
   "description": "The backend for meko_drinks",
-  "main": "dist/index.js",
+  "main": "build/index.js",
   "repository": "https://github.com/lamecksilva/meko_drinks_backend.git",
   "author": "Lameck Sandro <lameck2@hotmail.com>",
   "license": "MIT",
