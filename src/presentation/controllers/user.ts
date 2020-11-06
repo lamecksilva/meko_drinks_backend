@@ -4,6 +4,7 @@ import { NextFunction, Request, Response } from 'express'
 import {
   getUserByEmailDB,
   getUserById,
+  getUserByIdWPassword,
   removeUserDB,
   returnAllUsersDB,
   saveNewUserDB,
@@ -71,13 +72,25 @@ export const userController = {
   },
   updatePassword: async (req: Request, res: Response, next: NextFunction): Promise<any> => {
     try {
-      const passwordCrypted = await hash(req.body.password, 10)
+      const user = await getUserByIdWPassword(req.params.id)
 
-      await updatePasswordDB(req.params.id, passwordCrypted)
+      const match = await compare(req.body?.oldPassword, user.password)
 
-      const updatedUser = await getUserById(req.params.id)
+      if (!match) {
+        return Responses.error(
+          res,
+          { oldPassword: 'Password not match' },
+          'Error while update password'
+        )
+      } else {
+        const passwordCrypted = await hash(req.body.password, 10)
 
-      return Responses.success(res, updatedUser)
+        await updatePasswordDB(req.params.id, passwordCrypted)
+
+        const user = await getUserById(req.params.id)
+
+        return Responses.success(res, user)
+      }
     } catch (err) {
       next(err)
     }

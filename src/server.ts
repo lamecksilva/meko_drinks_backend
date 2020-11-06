@@ -1,5 +1,6 @@
 import express, { Application } from 'express'
 
+import { startJobs } from './jobs'
 import { applyMiddlewares } from './modules'
 import { applyRoutes } from './presentation'
 import { logger } from './utils'
@@ -15,8 +16,9 @@ export async function startServer(): Promise<void> {
 
   await applyRoutes(app)
 
+  await startJobs()
+
   app.listen(SERVER_PORT, () => {
     logger.info(`[ STATUS ] 🚀 ${SERVER_NAME} running on port: ${SERVER_PORT}`)
-    logger.info('-----------------------------------------------------------------------')
   })
 }

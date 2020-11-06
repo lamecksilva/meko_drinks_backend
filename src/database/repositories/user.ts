@@ -57,6 +57,20 @@ export async function getUserById(id: string): Promise<any> {
 }
 
 /**
+ * Search and find a user by Id
+ * @param id id of the user
+ */
+export async function getUserByIdWPassword(id: string): Promise<any> {
+  try {
+    const user = await User.findOne({ _id: id }, { __v: 0 }).lean()
+
+    return user
+  } catch (err) {
+    throw new Error(err)
+  }
+}
+
+/**
  * Search and update user by id
  *
  * @param id id of the user
@@ -64,7 +78,11 @@ export async function getUserById(id: string): Promise<any> {
  */
 export async function updateUserDB(id: string, data: any): Promise<any> {
   try {
-    const user = await User.findOneAndUpdate({ _id: id }, { $set: data }, { new: true }).lean()
+    const user = await User.findOneAndUpdate(
+      { _id: id },
+      { $set: { name: data?.name } },
+      { new: true }
+    ).lean()
 
     return user
   } catch (err) {

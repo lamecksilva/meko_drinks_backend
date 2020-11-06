@@ -9,7 +9,7 @@ export async function validator(
   return new Promise((resolve, reject) => {
     const validator = new Validator(body, rules, customMessages)
     const handleFails = () => {
-      console.log(validator.errors)
+      // console.log(validator.errors)
       reject(validator.errors.all())
     }
 
