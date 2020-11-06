@@ -5,6 +5,7 @@ import cors from 'cors'
 import { Application, json, urlencoded } from 'express'
 import helmet from 'helmet'
 import morgan from 'morgan'
+import passport from 'passport'
 
 import { connectDB } from '../database'
 import { logger } from '../utils'
@@ -19,6 +20,8 @@ export async function applyMiddlewares(app: Application): Promise<void> {
   app.disable('x-powered-by')
   app.set('trust proxy', 'loopback')
   app.set('env', process.env.NODE_ENV)
+
+  app.use(passport.initialize())
 
   connectDB()
 
