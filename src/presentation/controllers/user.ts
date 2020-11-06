@@ -11,8 +11,7 @@ import {
   updatePasswordDB,
   updateUserDB,
 } from '../../database'
-import { jwtSign } from '../../modules'
-import { Responses } from '../../utils'
+import { jwtSign, Responses } from '../../utils'
 
 export const userController = {
   returnAllUsers: async (_: Request, res: Response, next: NextFunction): Promise<any> => {
